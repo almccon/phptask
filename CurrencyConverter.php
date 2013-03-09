@@ -31,7 +31,7 @@ class CurrencyConverter
 		try {
 			$xml = simplexml_load_file($request_url); 
 		} catch (Exception $e) {
-    		echo 'Caught exception: ',  $e->getMessage(), "\n";
+    		echo 'Caught exception: ',  $e->getMessage(), PHP_EOL;
 		}
 		
 		// parse list of rates	
@@ -40,12 +40,12 @@ class CurrencyConverter
 	
 		//$i = 0;	
 		foreach($xml->conversion as $conversion) {
-			//echo "loop ", $i++, "\n";
+			//echo "loop ", $i++, PHP_EOL;
 			
 			//print_r($conversion);
 			$curname = $conversion->currency;
 			$currate = $conversion->rate;
-			echo $curname, " ", $currate, "\n";
+			echo $curname, " ", $currate, PHP_EOL;
 			
 			// update database entry for each currency
 		
@@ -105,6 +105,6 @@ $conv->update_rates();
 // Here I'll test the module on the command line. 
 // Does php have anything like python's if __name__ == "__main__" construct?
 
-echo "hello world\n";
+echo "hello world", PHP_EOL;
 
 ?>
