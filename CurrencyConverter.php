@@ -5,22 +5,37 @@
 
 // SimpleXML code based on http://paulstamatiou.com/how-to-parse-xml-with-php5
 
+// PHP-MySQL code based on http://www.w3schools.com/php/php_mysql_connect.asp and the PHP manual
+
 class CurrencyConverter
 {
 	// property declarations
 	
 	// private database handle goes here
 	
+	private $con;
+	
     // method declarations
     
 	function __construct() {
 		
 		// Initialize db connection here
+		try {
+			$mysqli = new mysqli("127.0.0.1","phptask","phptaskpw","phptask");
+		} catch (Exception $e) {
+			echo 'Caught exception: ',  $e->getMessage(), PHP_EOL;
+		}
+		if ($mysqli->connect_errno) {
+			echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+		}
+		
+		$this->con = $mysqli;	
 	}
 	
 	public function update_rate($curname, $currate) {
 		
 		// do something
+		$this->con->query("UPDATE OR INSERT...");
 		
 	}
 
@@ -58,6 +73,8 @@ class CurrencyConverter
 	public function lookup_rate($curname) {
 		
 		// query database
+		$res = $this->con->query("SELECT currate FROM exchange_rates WHERE curname = $curname");
+		$rate = $res->fetch_assoc();
 		
 		return $rate;
 		
