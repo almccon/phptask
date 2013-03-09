@@ -60,7 +60,7 @@ class CurrencyConverter
 		
 		list ($curname, $curvalue) = parse_currency($input_string);
 		
-		$rate = $self->lookup_rate($curname);
+		$rate = $this->lookup_rate($curname);
 		
 		return join_currency("USD", $rate*$curvalue);
 	}
@@ -71,7 +71,7 @@ class CurrencyConverter
 		
 		$output_array = array();
 		foreach ($input_array as $item)	{
-			array_push($output_array, $self->convert($item));
+			array_push($output_array, $this->convert($item));
 		}
 		return $output_array;
 	}
