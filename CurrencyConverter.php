@@ -17,6 +17,12 @@ class CurrencyConverter
 		
 		// Initialize db connection here
 	}
+	
+	public function update_rate($curname, $currate) {
+		
+		// do something
+		
+	}
 
 	public function update_rates() {
 		$request_url = 'http://toolserver.org/~kaldari/rates.xml';
@@ -27,11 +33,25 @@ class CurrencyConverter
 		} catch (Exception $e) {
     		echo 'Caught exception: ',  $e->getMessage(), "\n";
 		}
-	
+		
 		// parse list of rates	
 		
-		// update database entry for each currency
+		//print_r($xml); // print_r is like Python's pprint (pretty print)
+	
+		//$i = 0;	
+		foreach($xml->conversion as $conversion) {
+			//echo "loop ", $i++, "\n";
+			
+			//print_r($conversion);
+			$curname = $conversion->currency;
+			$currate = $conversion->rate;
+			echo $curname, " ", $currate, "\n";
+			
+			// update database entry for each currency
 		
+			$this->update_rate($curname, $currate);
+		}
+	
 		// return success or failure	
 	}
 	
@@ -79,6 +99,8 @@ class CurrencyConverter
 }
 
 $conv = new CurrencyConverter(); 
+
+$conv->update_rates();
 
 // Here I'll test the module on the command line. 
 // Does php have anything like python's if __name__ == "__main__" construct?
