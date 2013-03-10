@@ -9,7 +9,7 @@
 
 CREATE TABLE exchange_rates 
   (
-    curname CHAR(3),  
+    curname CHAR(3) PRIMARY KEY,  
     currate FLOAT
   )
 ;
