@@ -45,18 +45,8 @@ class CurrencyConverter
 		// There are several improvements I could make here:
 		// Probably I could update all the currencies at once, instead of having a query for each one.
 		// Also, these nested if statements are clumsy 
-		if ($this->con->query("UPDATE exchange_rates SET currate = " . $currate . " WHERE curname = '" . $curname . "'")) {
-			if ($this->con->affected_rows==0) {
-				// Problem: this keeps duplicating rows. Need to make curname a primary key
-				$this->con->query("INSERT INTO exchange_rates (curname, currate) VALUES ('" . $curname . "'," . $currate . ")");
-				if ($this->con->affected_rows==0) {
-					if (self::DEBUG) echo "DEBUG: did not insert", PHP_EOL;
-				} else {
-					if (self::DEBUG) echo "DEBUG: successful insert", PHP_EOL;
-				}
-			} else {
-				if (self::DEBUG) echo "DEBUG: successful update", PHP_EOL;
-			}
+		if ($this->con->query("REPLACE INTO exchange_rates (curname, currate) VALUES ('" . $curname . "'," . $currate . ")")) {
+			if (self::DEBUG) echo "DEBUG: successful update", PHP_EOL;
 			return TRUE;
 		} else {
 			echo "ERROR: Failed to update database: ", $this->con->error, PHP_EOL;
