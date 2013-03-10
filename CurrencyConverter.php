@@ -15,11 +15,11 @@ class CurrencyConverter
 	
 	private $con;
 	
-	// for debugging. Error messages will still print if $debug = FALSE
+	// For debugging. Error messages will still print if DEBUG = false.
 	// If this code were generating a web page I would send all messages
-	// to an error log instead of echo
+	// to an error log instead of echo.
 	
-	public static $debug = FALSE;
+	const DEBUG = FALSE;
 	
     // method declarations
     
@@ -50,12 +50,12 @@ class CurrencyConverter
 				// Problem: this keeps duplicating rows. Need to make curname a primary key
 				$this->con->query("INSERT INTO exchange_rates (curname, currate) VALUES ('" . $curname . "'," . $currate . ")");
 				if ($this->con->affected_rows==0) {
-					if (self::$debug) echo "DEBUG: did not insert", PHP_EOL;
+					if (self::DEBUG) echo "DEBUG: did not insert", PHP_EOL;
 				} else {
-					if (self::$debug) echo "DEBUG: successful insert", PHP_EOL;
+					if (self::DEBUG) echo "DEBUG: successful insert", PHP_EOL;
 				}
 			} else {
-				if (self::$debug) echo "DEBUG: successful update", PHP_EOL;
+				if (self::DEBUG) echo "DEBUG: successful update", PHP_EOL;
 			}
 			return TRUE;
 		} else {
@@ -81,7 +81,7 @@ class CurrencyConverter
 			
 			$curname = $conversion->currency;
 			$currate = $conversion->rate;
-			if (self::$debug) echo "DEBUG: updating rate ", $curname, " ", $currate, PHP_EOL;
+			if (self::DEBUG) echo "DEBUG: updating rate ", $curname, " ", $currate, PHP_EOL;
 			
 			// update database entry for each currency
 		
@@ -92,7 +92,7 @@ class CurrencyConverter
 	}
 	
 	public function lookup_rate($curname) {
-		if (self::$debug) echo "DEBUG: lookup rate for ", $curname, PHP_EOL;
+		if (self::DEBUG) echo "DEBUG: lookup rate for ", $curname, PHP_EOL;
 		
 		if ($res = $this->con->query("SELECT currate FROM exchange_rates WHERE curname = '" . $curname . "'")) {
 			if ($res->num_rows==0) {
@@ -114,7 +114,7 @@ class CurrencyConverter
 	private function parse_currency($input_string) {
 		// split the currency string into currency name and value
 		
-		if (self::$debug) echo "DEBUG: parsing ", $input_string, PHP_EOL;
+		if (self::DEBUG) echo "DEBUG: parsing ", $input_string, PHP_EOL;
 		
 		// Could do a simple split here using preg_split()...
 		// ...but to be safe I will only match specifically what I want.
@@ -128,10 +128,10 @@ class CurrencyConverter
 		if (preg_match("/(\w\w\w)\s+([\d\.]+)/",$input_string, $matches)) {
 			$curname = $matches[1]; // start from 1... 0 returns all matches
 			$curvalue = $matches[2];
-			if (self::$debug) echo "DEBUG: regex matched name: ", $curname, " value: ", $curvalue, PHP_EOL;
+			if (self::DEBUG) echo "DEBUG: regex matched name: ", $curname, " value: ", $curvalue, PHP_EOL;
 			return array ($curname, $curvalue);
 		} else {
-			if (self::$debug) echo "DEBUG: regex did not match", PHP_EOL;
+			if (self::DEBUG) echo "DEBUG: regex did not match", PHP_EOL;
 			return FALSE;
 		}
 	}
@@ -147,13 +147,13 @@ class CurrencyConverter
 		// Convert one foreign amount to USD
 		
 		list ($curname, $curvalue) = $this->parse_currency($input_string);
-		if (self::$debug) echo "DEBUG: parse result: ", $curname, " ", $curvalue, PHP_EOL;
+		if (self::DEBUG) echo "DEBUG: parse result: ", $curname, " ", $curvalue, PHP_EOL;
 		
 		$rate = $this->lookup_rate($curname);
-		if (self::$debug) echo "DEBUG: rate: ", $rate, PHP_EOL;
+		if (self::DEBUG) echo "DEBUG: rate: ", $rate, PHP_EOL;
 		
 		$usd = $rate * $curvalue;	
-		if (self::$debug) echo "DEBUG: converted to usd: ", $usd, PHP_EOL;
+		if (self::DEBUG) echo "DEBUG: converted to usd: ", $usd, PHP_EOL;
 		
 		return $this->join_currency("USD", $usd);
 	}
